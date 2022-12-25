@@ -13,7 +13,7 @@ class User extends StatefulWidget {
 
 class _User extends State<User> with DuaNavigationFocusMixin, DuaNavigationAutoReleaseMixin {
   @override
-  String name() => "user";
+  String get name => "user";
 
   @override
   List makeAutoReleaseResource() {
@@ -24,7 +24,7 @@ class _User extends State<User> with DuaNavigationFocusMixin, DuaNavigationAutoR
 
   @override
   void onFocusChanged(bool focused) {
-    debugPrint("Page ${name()}，当前${focused ? '获得' : '失去'}焦点");
+    debugPrint("Page ${name}，当前${focused ? '获得' : '失去'}焦点");
   }
 
   @override

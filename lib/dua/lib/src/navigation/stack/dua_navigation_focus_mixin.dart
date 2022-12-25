@@ -14,7 +14,7 @@ mixin DuaNavigationFocusMixin {
   void loadNavigationFocus() {
     _unsubscribe();
     unsubscribe = Broadcast.shared.addListener(DUA_NAVIGATION_FOCUS_EVENT, (routename) {
-      if (routename == name()) {
+      if (routename == name) {
         onFocusChanged(true);
         __focused = true;
       } else {
@@ -31,7 +31,7 @@ mixin DuaNavigationFocusMixin {
   }
 
   ///required
-  String name();
+  String get name;
 
   /// required
   void onFocusChanged(bool focused);

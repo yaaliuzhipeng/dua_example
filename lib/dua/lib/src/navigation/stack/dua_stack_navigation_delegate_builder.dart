@@ -1,5 +1,6 @@
 import './dua_route_information_parser.dart';
 import './dua_stack_navigation_delegate.dart';
+import '../../appstructure/dio.dart';
 import 'package:flutter/widgets.dart';
 
 class DuaStackNavigationDelegateBuilder {
@@ -12,11 +13,13 @@ class DuaStackNavigationDelegateBuilder {
   List<NavigatorObserver>? _observers;
   String? _initialPage;
   List<DuaStackNavigationPage>? _pages;
+  late bool _injectDelegateDependency;
 
   bool isPagesValide() => _pages != null && _pages!.isNotEmpty;
 
   DuaStackNavigationDelegateBuilder() {
     _duaRouteInformationParser = DuaRouteInformationParser();
+    _injectDelegateDependency = false;
   }
 
   DuaStackNavigationDelegateBuilder.fill({
@@ -24,9 +27,11 @@ class DuaStackNavigationDelegateBuilder {
     List<NavigatorObserver>? observers,
     String? initialPage,
     List<DuaStackNavigationPage>? pages,
+    bool? injectDelegateDependency,
   })  : _onUnknownRoute = onUnknownRoute,
         _observers = observers,
         _initialPage = initialPage,
+        _injectDelegateDependency = injectDelegateDependency ?? true,
         _pages = pages {
     _duaRouteInformationParser = DuaRouteInformationParser();
   }
@@ -48,6 +53,11 @@ class DuaStackNavigationDelegateBuilder {
 
   DuaStackNavigationDelegateBuilder setPages(List<DuaStackNavigationPage>? pages) {
     _pages = pages;
+    return this;
+  }
+
+  DuaStackNavigationDelegateBuilder useInjectDelegateDependency(bool? inject) {
+    _injectDelegateDependency = inject ?? false;
     return this;
   }
 
@@ -78,6 +88,9 @@ class DuaStackNavigationDelegateBuilder {
       routeInformationParser: _duaRouteInformationParser,
       backButtonDispatcher: _duaBackButtonDispatcher,
     );
+    if (_injectDelegateDependency) {
+      Dio.put<DuaStackNavigationDelegate>(_duaStackNavigationDelegate!);
+    }
     return _routerConfig!;
   }
 }

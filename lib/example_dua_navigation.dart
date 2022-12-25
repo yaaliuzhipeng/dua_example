@@ -14,6 +14,7 @@ var router;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   router = DuaStackNavigationDelegateBuilder.fill(
+    injectDelegateDependency: true,
     initialPage: PAGE_HOME,
     observers: [],
     pages: <DuaStackNavigationPage>[
@@ -22,8 +23,6 @@ void main() {
       buildStackNavigationMaterialPage(PAGE_USER_DETAIL, UserDetail()),
     ],
   ).build();
-
-  Dio.put<DuaStackNavigationDelegate>(router.routerDelegate as DuaStackNavigationDelegate);
 
   runApp(App());
 }

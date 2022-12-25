@@ -12,7 +12,7 @@ class _Home extends State<Home> with DuaNavigationFocusMixin, DuaNavigationAutoR
   final style = const TextStyle(fontSize: 18, color: Colors.blue);
 
   @override
-  String name() => "home";
+  String get name => "home";
 
   @override
   List makeAutoReleaseResource() {
@@ -30,7 +30,7 @@ class _Home extends State<Home> with DuaNavigationFocusMixin, DuaNavigationAutoR
 
   @override
   void onFocusChanged(bool focused) {
-    debugPrint("Page ${name()}，当前${focused ? '获得' : '失去'}焦点");
+    debugPrint("Page ${name}，当前${focused ? '获得' : '失去'}焦点");
   }
 
   @override

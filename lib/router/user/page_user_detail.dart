@@ -33,25 +33,25 @@ class _UserDetail extends State<UserDetail> {
               Text("Page UserDetail"),
               TextButton(
                 onPressed: () {
-                  DuaStackNavigation.of(context).goBack(name: "/");
+                  DuaStackNavigationDelegate.of(context).goBack(name: "/");
                 },
                 child: Text("goBack home", style: style),
               ),
               TextButton(
                 onPressed: () {
-                  DuaStackNavigation.of(context).goBack(result: "success");
+                  DuaStackNavigationDelegate.of(context).goBack(result: "success");
                 },
                 child: Text("goBack with result", style: style),
               ),
               TextButton(
                 onPressed: () {
-                  DuaStackNavigation.of(context).goBack();
+                  DuaStackNavigationDelegate.of(context).goBack();
                 },
                 child: Text("goBack", style: style),
               ),
               TextButton(
                 onPressed: () {
-                  DuaStackNavigation.of(context).reset((currentRoutes) {
+                  DuaStackNavigationDelegate.of(context).reset((currentRoutes) {
                     var routes = currentRoutes.sublist(0, 1);
                     return routes;
                   });

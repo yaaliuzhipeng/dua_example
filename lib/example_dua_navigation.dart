@@ -13,7 +13,7 @@ const PAGE_USER_DETAIL = "user_detail";
 var router;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  router = DuaStackNavigationBuilder.fill(
+  router = DuaStackNavigationDelegateBuilder.fill(
     initialPage: PAGE_HOME,
     observers: [],
     pages: <DuaStackNavigationPage>[
@@ -23,7 +23,7 @@ void main() {
     ],
   ).build();
 
-  Dio.put<DuaStackNavigation>(router.routerDelegate as DuaStackNavigation);
+  Dio.put<DuaStackNavigationDelegate>(router.routerDelegate as DuaStackNavigationDelegate);
 
   runApp(App());
 }

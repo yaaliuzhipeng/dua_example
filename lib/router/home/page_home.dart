@@ -56,7 +56,7 @@ class _Home extends State<Home> with DuaNavigationFocusMixin, DuaNavigationAutoR
             Text("Page Home"),
             TextButton(
               onPressed: () {
-                DuaStackNavigation.of(context).navigate('user');
+                DuaStackNavigationDelegate.of(context).navigate('user');
               },
               child: Text("navigate to user", style: style),
             )

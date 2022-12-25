@@ -57,19 +57,19 @@ class _User extends State<User> with DuaNavigationFocusMixin, DuaNavigationAutoR
             const Text("Page User"),
             TextButton(
               onPressed: () {
-                Dio.find<DuaStackNavigation>()?.navigate('user_detail');
+                Dio.find<DuaStackNavigationDelegate>()?.navigate('user_detail');
               },
               child: const Text("navigate to user detail", style: style),
             ),
             TextButton(
               onPressed: () {
-                DuaStackNavigation.of(context).navigate('user_detail', forResult: true);
+                DuaStackNavigationDelegate.of(context).navigate('user_detail', forResult: true);
               },
               child: Text("navigate to user detail for result", style: style),
             ),
             TextButton(
               onPressed: () {
-                DuaStackNavigation.of(context).goBack();
+                DuaStackNavigationDelegate.of(context).goBack();
               },
               child: Text("goBack", style: style),
             ),

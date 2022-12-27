@@ -1,3 +1,4 @@
+import 'package:dua/structure.dart';
 import 'package:flutter/widgets.dart';
 import './dua_stack_navigation_delegate.dart';
 
@@ -22,5 +23,23 @@ extension DuaStackNavigationBuildContextExtension on BuildContext {
 
   Object? getRouteResult(String key) {
     return DuaStackNavigationDelegate.of(this).getRouteResult(key);
+  }
+}
+
+extension DuaStackNavigationStringExtension on String {
+  void go() {
+    var delegate = Dio.find<DuaStackNavigationDelegate>();
+    delegate?.navigate(this);
+  }
+
+  void goForResult() {
+    var delegate = Dio.find<DuaStackNavigationDelegate>();
+    delegate?.navigate(this, forResult: true);
+  }
+
+  void goBack({Object? result}) {
+    var delegate = Dio.find<DuaStackNavigationDelegate>();
+    bool isEmptyString = this == "";
+    delegate?.goBack(name: isEmptyString ? null : this, result: result);
   }
 }

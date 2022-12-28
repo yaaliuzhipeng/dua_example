@@ -10,15 +10,19 @@ mixin DuaNavigationAutoReleaseMixin {
     if (__autoReleaseResourceInjected) return;
     __autoReleaseResourceInjected = true;
     for (var o in makeAutoReleaseResource()) {
-      Dio.put(o, tag: o.runtimeType.toString());
+      Dio.put(o, tag: "auto_${o.runtimeType}");
     }
   }
 
   void disposeNavigationAutoRelease() {
     if (__autoReleaseResourceInjected) {
       for (var o in makeAutoReleaseResource()) {
-        Dio.remove(o.runtimeType.toString());
+        Dio.remove("auto_${o.runtimeType}");
       }
     }
+  }
+
+  T find<T>(){
+    return Dio.find("auto_$T");
   }
 }

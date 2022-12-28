@@ -1,6 +1,6 @@
-import 'package:dua/structure.dart';
 import 'package:flutter/widgets.dart';
 import './dua_stack_navigation_delegate.dart';
+import '../../appstructure/dio.dart';
 
 extension DuaStackNavigationBuildContextExtension on BuildContext {
   void navigate(String name, {Object? params, bool? forResult}) {

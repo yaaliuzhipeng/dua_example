@@ -24,6 +24,7 @@ void main() {
     ],
   ).build();
 
+  DuaStateManager.shared.openDebugLog();
   runApp(App());
 }
 

@@ -1,3 +1,4 @@
+import 'package:dua_example/dua/lib/dua.dart';
 import 'package:dua_example/dua/lib/navigation.dart';
 import 'package:dua_example/router/home/store/home_store.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class _Home extends State<Home> with DuaNavigationFocusMixin, DuaNavigationAutoR
 
   @override
   Widget build(BuildContext context) {
+    var store = find<HomeStore>();
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       floatingActionButton: FloatingActionButton(
@@ -53,13 +55,34 @@ class _Home extends State<Home> with DuaNavigationFocusMixin, DuaNavigationAutoR
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Page Home"),
+            O(() {
+              return Text(store.text.value, style: const TextStyle(fontSize: 20, color: Colors.pink));
+            }),
+            O(() {
+              return Text(store.user.value.toString(), style: const TextStyle(fontSize: 20, color: Colors.pink));
+            }, [store.user]),
             TextButton(
               onPressed: () {
-                DuaStackNavigationDelegate.of(context).navigate('user');
+                var store = find<HomeStore>();
+                store.setText("hello world");
+              },
+              child: Text("update text", style: style),
+            ),
+            TextButton(
+              onPressed: () {
+                var store = find<HomeStore>();
+                User user = store.user.value as User;
+                user.id = 666;
+                store.setUser(user);
+              },
+              child: Text("update user", style: style),
+            ),
+            TextButton(
+              onPressed: () {
+                "user".go();
               },
               child: Text("navigate to user", style: style),
-            )
+            ),
           ],
         ),
       ),

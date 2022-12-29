@@ -71,11 +71,28 @@ class _Home extends State<Home> with DuaNavigationFocusMixin, DuaNavigationAutoR
             TextButton(
               onPressed: () {
                 var store = find<HomeStore>();
-                User user = store.user.value as User;
-                user.id = 666;
-                store.setUser(user);
+                User u = store.user.value as User;
+                debugPrint("更新前value为 =>\n$u");
+                store.user.setValue(() {
+                  u.id = 678;
+                  u.name = "tommy";
+                });
+                store.update();
+                debugPrint("更新后value为 =>\n${store.user.value}");
               },
               child: Text("update user", style: style),
+            ),
+            TextButton(
+              onPressed: () {
+                var store = find<HomeStore>();
+                User u = store.user.value as User;
+                debugPrint("更新前value为 =>\n$u");
+                u.id = 777;
+                u.name = "jim";
+                store.setUser(u);
+                debugPrint("更新后value为 =>\n${store.user.value}");
+              },
+              child: Text("update user❌", style: style),
             ),
             TextButton(
               onPressed: () {

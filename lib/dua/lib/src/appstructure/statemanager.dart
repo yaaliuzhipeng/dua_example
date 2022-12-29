@@ -159,13 +159,14 @@ class DuaStateManager {
   /// @param observableValues => 本更新批次中观察者的哪些观察值变更了
   ///
   void requireUpdate(int observable, List<int> observableValues) {
+    _log("要求更新的观察者类: $observable 以及观察者值: $observableValues");
     if (!obsObservables.contains(observable)) {
       _log("❌ 观察者已经销毁");
       return;
     }
     if (frozenObservables.contains(observable)) {
       _log("❄️观察者$observable当前已冻结、不进行通知");
-      //TODO: 记录所有冻结期间更新的观察值、在恢复时进行通知
+      pendingUpdateBatches.add(PendingUpdate(observable, observableValues));
       return;
     }
     // 1. 通知所有未设置依赖的监听者
@@ -263,28 +264,13 @@ class Observer<T> extends StatefulWidget {
 class _ObserverState extends State<Observer> {
   final _ObserverUpdateNotifier notifier = _ObserverUpdateNotifier();
   late List<dynamic> deps = widget.deps ?? [];
-  late HashMap<int, Object> dmap;
   bool isMounted = true;
 
   @override
   void initState() {
-    dmap = HashMap();
-    deps.forEach((dep) {
-        dmap[dep.hashCode] = dep.value;
-    });
     notifier.addListener(() {
       if (isMounted == false) return;
-      bool shouldUpdate = widget.deps == null ? true : false;
-      for (var v in deps) {
-        if (dmap[v.hashCode] != v.value) {
-          shouldUpdate = true;
-          dmap[v.hashCode] = v.value;
-        } else {
-          //TODO: object type
-        }
-      }
-      //通知组件rebuild
-      if (shouldUpdate) setState(() {});
+      setState(() {});
     });
     // 这里必须使用widget.deps 、deps是否为null也影响组件更新决策
     DuaStateManager.shared.markObserverWidget(hashCode, widget.deps, notifier);
@@ -333,9 +319,9 @@ class OvValue<T> {
 
   T get value => _value;
 
-  set value(T v) {
-    _markChangedValue!(hashCode);
-    _value = v;
+  set value(T newValue) {
+    if (newValue != value) _markChangedValue!(hashCode);
+    _value = newValue;
   }
 }
 
@@ -344,6 +330,11 @@ class OvObject extends OvValue {
 
   @override
   Object get value => _value as Object;
+
+  void setValue(Function() callback) {
+    callback();
+    _markChangedValue!(hashCode);
+  }
 }
 
 class OvInt extends OvValue {

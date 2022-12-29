@@ -10,10 +10,10 @@ class User {
   @override
   String toString() {
     return '''
-    ====> User <====
-    id: $id
-    name: $name
-    ================
+====> User <====
+id: $id
+name: $name
+================
     ''';
   }
 

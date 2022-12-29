@@ -46,7 +46,7 @@ class DuaStackNavigationPage {
 
 typedef NavigationResetCallack = List<DuaNavigationRoute> Function(List<DuaNavigationRoute> currentRoutes);
 
-class DuaStackNavigationDelegate extends RouterDelegate<String> with PopNavigatorRouterDelegateMixin, ChangeNotifier, DuaNavigationFocusEmitterMixin,WidgetsBindingObserver {
+class DuaStackNavigationDelegate extends RouterDelegate<String> with PopNavigatorRouterDelegateMixin, ChangeNotifier, DuaNavigationFocusEmitterMixin, WidgetsBindingObserver {
   DuaStackNavigationDelegate({
     this.onUnknownRoute,
     this.observers = const [],
@@ -138,10 +138,9 @@ class DuaStackNavigationDelegate extends RouterDelegate<String> with PopNavigato
     return SynchronousFuture<void>(null);
   }
 
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if( state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       notifyListeners();
     }
     super.didChangeAppLifecycleState(state);
@@ -226,9 +225,12 @@ class DuaBackButtonDispatcher extends RootBackButtonDispatcher {
   final DuaStackNavigationDelegate delegate;
 
   @override
-  Future<bool> didPopRoute() {
+  Future<bool> didPopRoute() async {
     if (DuaBackHandler.shared.invoker != null) {
-      return DuaBackHandler.shared.invoker!();
+      bool handled = await DuaBackHandler.shared.invoker!();
+      if (handled) {
+        return true;
+      } // else 交由 delegate进行处理
     }
     return delegate._didPopRoute();
   }

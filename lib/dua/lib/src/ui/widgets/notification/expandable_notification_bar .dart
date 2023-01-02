@@ -2,7 +2,7 @@ import '../empty.dart';
 import './base_notification_bar.dart';
 import 'package:flutter/material.dart';
 
-import '../../animation/size_height_expand_transition.dart';
+import '../../../animation/size_height_expand_transition.dart';
 
 class ExpandableNotificationBar extends StatelessWidget {
   ExpandableNotificationBar({

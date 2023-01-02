@@ -34,9 +34,10 @@ class MyApp extends StatelessWidget {
       pageBuilder: (context, state) {
         debugPrint('A页面 state.location => ${state.location}');
         return MaterialPage(
-            child: MyPage(
-          title: "A",
-        ));
+          child: MyPage(
+            title: "A",
+          ),
+        );
       },
     ),
   ]);

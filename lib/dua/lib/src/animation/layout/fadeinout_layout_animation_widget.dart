@@ -15,6 +15,7 @@ class FadeInOutLayoutAnimationWidget extends StatefulWidget {
     int? duration,
     double? from,
     double? to,
+    this.onExited,
   })  : duration = duration ?? 280,
         begin = from ?? 0,
         end = to ?? 1,
@@ -27,6 +28,7 @@ class FadeInOutLayoutAnimationWidget extends StatefulWidget {
   final double end;
   final FadeInOutLayoutAnimationWidgetController? controller;
   final bool removeAfterOutAnimation;
+  final void Function()? onExited;
 
   @override
   State<StatefulWidget> createState() => _FadeInOutLayoutAnimationWidget();
@@ -47,6 +49,7 @@ class _FadeInOutLayoutAnimationWidget extends State<FadeInOutLayoutAnimationWidg
         if (controller.status == AnimationStatus.dismissed) {
           //完全隐藏了
           visible = false;
+          if (widget.onExited != null) widget.onExited!();
         }
         setState(() {});
       });
@@ -68,7 +71,6 @@ class _FadeInOutLayoutAnimationWidget extends State<FadeInOutLayoutAnimationWidg
   void dispose() {
     isMounted = false;
     super.dispose();
-    controller.clearListeners();
     controller.dispose();
   }
 
@@ -100,6 +102,7 @@ extension FadeInOutLayoutAnimationWidgetExtension on Widget {
     double? to,
     int? duration,
     bool? removeAfterOutAnimation,
+    void Function()? onExited,
   }) =>
       FadeInOutLayoutAnimationWidget(
         visible: visible ?? true,
@@ -108,5 +111,6 @@ extension FadeInOutLayoutAnimationWidgetExtension on Widget {
         from: from,
         to: to,
         removeAfterOutAnimation: removeAfterOutAnimation,
+        onExited: onExited,
       );
 }

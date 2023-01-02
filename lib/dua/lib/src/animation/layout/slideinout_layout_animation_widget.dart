@@ -17,6 +17,7 @@ class SlideInOutLayoutAnimationWidget extends StatefulWidget {
     Curve? reverseCurve,
     Offset? from,
     Offset? to,
+    this.onExited,
   })  : duration = duration ?? 280,
         curve = curve ?? Curves.decelerate,
         reverseCurve = reverseCurve ?? Curves.decelerate,
@@ -33,6 +34,7 @@ class SlideInOutLayoutAnimationWidget extends StatefulWidget {
   final Offset end;
   final SlideInAnimationWidgetController? controller;
   final bool removeAfterOutAnimation;
+  final void Function()? onExited;
 
   @override
   State<StatefulWidget> createState() => _CurveSlideInOutLayoutAnimationWidget();
@@ -53,6 +55,7 @@ class _CurveSlideInOutLayoutAnimationWidget extends State<SlideInOutLayoutAnimat
         if (controller.status == AnimationStatus.dismissed) {
           //完全隐藏了
           visible = false;
+          if (widget.onExited != null) widget.onExited!();
         }
         setState(() {});
       });
@@ -74,7 +77,6 @@ class _CurveSlideInOutLayoutAnimationWidget extends State<SlideInOutLayoutAnimat
   void dispose() {
     isMounted = false;
     super.dispose();
-    controller.clearListeners();
     controller.dispose();
   }
 
@@ -111,6 +113,7 @@ class SlideInDownLayoutAnimationWidget extends StatelessWidget {
     this.reverseCurve,
     this.controller,
     this.removeAfterOutAnimation,
+    this.onExited,
   });
 
   final bool visible;
@@ -120,6 +123,7 @@ class SlideInDownLayoutAnimationWidget extends StatelessWidget {
   final int? duration;
   final SlideInAnimationWidgetController? controller;
   final bool? removeAfterOutAnimation;
+  final void Function()? onExited;
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +136,7 @@ class SlideInDownLayoutAnimationWidget extends StatelessWidget {
       curve: curve,
       reverseCurve: reverseCurve,
       controller: controller,
+      onExited: onExited,
       child: child,
     );
   }
@@ -148,6 +153,7 @@ class SlideInUpLayoutAnimationWidget extends StatelessWidget {
     this.reverseCurve,
     this.controller,
     this.removeAfterOutAnimation,
+    this.onExited,
   });
 
   final bool visible;
@@ -157,6 +163,7 @@ class SlideInUpLayoutAnimationWidget extends StatelessWidget {
   final int? duration;
   final SlideInAnimationWidgetController? controller;
   final bool? removeAfterOutAnimation;
+  final void Function()? onExited;
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +176,7 @@ class SlideInUpLayoutAnimationWidget extends StatelessWidget {
       curve: curve,
       reverseCurve: reverseCurve,
       controller: controller,
+      onExited: onExited,
       child: child,
     );
   }
@@ -185,6 +193,7 @@ class SlideInLeftLayoutAnimationWidget extends StatelessWidget {
     this.reverseCurve,
     this.controller,
     this.removeAfterOutAnimation,
+    this.onExited,
   });
 
   final bool visible;
@@ -194,6 +203,7 @@ class SlideInLeftLayoutAnimationWidget extends StatelessWidget {
   final int? duration;
   final SlideInAnimationWidgetController? controller;
   final bool? removeAfterOutAnimation;
+  final void Function()? onExited;
 
   @override
   Widget build(BuildContext context) {
@@ -206,6 +216,7 @@ class SlideInLeftLayoutAnimationWidget extends StatelessWidget {
       curve: curve,
       reverseCurve: reverseCurve,
       controller: controller,
+      onExited: onExited,
       child: child,
     );
   }
@@ -222,6 +233,7 @@ class SlideInRightLayoutAnimationWidget extends StatelessWidget {
     this.reverseCurve,
     this.controller,
     this.removeAfterOutAnimation,
+    this.onExited,
   });
 
   final Widget child;
@@ -231,6 +243,7 @@ class SlideInRightLayoutAnimationWidget extends StatelessWidget {
   final int? duration;
   final SlideInAnimationWidgetController? controller;
   final bool? removeAfterOutAnimation;
+  final void Function()? onExited;
 
   @override
   Widget build(BuildContext context) {
@@ -243,6 +256,7 @@ class SlideInRightLayoutAnimationWidget extends StatelessWidget {
       curve: curve,
       reverseCurve: reverseCurve,
       controller: controller,
+      onExited: onExited,
       child: child,
     );
   }
@@ -259,6 +273,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
     int? duration,
     SlideInAnimationWidgetController? controller,
     bool? removeAfterOutAnimation,
+    void Function()? onExited,
   }) =>
       SlideInDownLayoutAnimationWidget(
         visible: visible ?? true,
@@ -267,6 +282,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
         duration: duration,
         removeAfterOutAnimation: removeAfterOutAnimation,
         controller: controller,
+        onExited: onExited,
         child: this,
       );
 
@@ -277,6 +293,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
     int? duration,
     SlideInAnimationWidgetController? controller,
     bool? removeAfterOutAnimation,
+    void Function()? onExited,
   }) =>
       SlideInUpLayoutAnimationWidget(
         visible: visible ?? true,
@@ -285,6 +302,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
         duration: duration,
         removeAfterOutAnimation: removeAfterOutAnimation,
         controller: controller,
+        onExited: onExited,
         child: this,
       );
 
@@ -295,6 +313,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
     int? duration,
     SlideInAnimationWidgetController? controller,
     bool? removeAfterOutAnimation,
+    void Function()? onExited,
   }) =>
       SlideInLeftLayoutAnimationWidget(
         visible: visible ?? true,
@@ -303,6 +322,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
         duration: duration,
         removeAfterOutAnimation: removeAfterOutAnimation,
         controller: controller,
+        onExited: onExited,
         child: this,
       );
 
@@ -313,6 +333,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
     int? duration,
     SlideInAnimationWidgetController? controller,
     bool? removeAfterOutAnimation,
+    void Function()? onExited,
   }) =>
       SlideInRightLayoutAnimationWidget(
         visible: visible ?? true,
@@ -321,6 +342,7 @@ extension SlideInOutLayoutAnimationWidgetExtensions on Widget {
         duration: duration,
         removeAfterOutAnimation: removeAfterOutAnimation,
         controller: controller,
+        onExited: onExited,
         child: this,
       );
 }

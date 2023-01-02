@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 extension ModalExtension on BuildContext {
-  int showModal(dynamic widget) {
+  int showModal(Widget widget) {
     return Modal.show(widget);
   }
 
@@ -13,14 +13,21 @@ extension ModalExtension on BuildContext {
 /// Modal
 /// 对外导出快捷类、用于展示和隐藏浮层
 class Modal {
-  static int show(dynamic widget) {
-    _ModalChangeNotifier.shared.setModal(action: 1, widget: widget, code: null);
+  static int show(Widget widget, [int? code]) {
+    _ModalChangeNotifier.shared.setModal(action: 1, widget: widget, code: code);
     return widget.hashCode;
   }
 
-  static void hide(int widget) {
-    _ModalChangeNotifier.shared.setModal(action: 0, widget: null, code: widget);
+  static void hide(int code) {
+    _ModalChangeNotifier.shared.setModal(action: 0, widget: null, code: code);
   }
+}
+
+class IdentifiedModal {
+  IdentifiedModal(this.code, this.widget);
+
+  final int code;
+  final Widget widget;
 }
 
 /// @widget ModalProvider
@@ -33,22 +40,23 @@ class ModalProvider extends StatefulWidget {
 }
 
 class ModalProviderState extends State<ModalProvider> {
-  List<dynamic> modals = [];
+  List<IdentifiedModal> modals = [];
 
-  void show(dynamic widget) {
-    int index = modals.indexWhere((el) => el.hashCode == widget.hashCode);
+  void show(Widget widget, [int? code]) {
+    int _code = code ?? widget.hashCode;
+    int index = modals.indexWhere((el) => el.code == _code);
     if (index == -1) {
-      modals.add(widget);
+      modals.add(IdentifiedModal(_code, widget));
       setState(() {});
       return;
     }
     modals.removeAt(index);
-    modals.insert(index, widget);
+    modals.insert(index, IdentifiedModal(_code, widget));
     setState(() {});
   }
 
   void hide(int code) {
-    int index = modals.indexWhere((el) => el.hashCode == code);
+    int index = modals.indexWhere((el) => el.code == code);
     if (index != -1) {
       modals.removeAt(index);
       setState(() {});
@@ -63,10 +71,12 @@ class ModalProviderState extends State<ModalProvider> {
       if (action == null) return;
       if (action == 1) {
         var widget = _ModalChangeNotifier.shared.modal['widget'];
+        var code = _ModalChangeNotifier.shared.modal['code'];
         if (widget != null) {
-          show(widget);
+          show(widget, code);
         }
       } else {
+        // action == 0
         var code = _ModalChangeNotifier.shared.modal['code'];
         if (code != null) {
           hide(code);
@@ -81,13 +91,14 @@ class ModalProviderState extends State<ModalProvider> {
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
-      children: [for (var m in modals) m],
+      children: [for (var m in modals) m.widget],
     );
   }
 }
 
 class _ModalChangeNotifier extends ChangeNotifier {
   static _ModalChangeNotifier? _instance;
+
   static _ModalChangeNotifier get shared => _instance ??= _ModalChangeNotifier();
 
   static final Map<String, dynamic> _defaultModal = {

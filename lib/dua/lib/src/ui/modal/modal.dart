@@ -33,7 +33,7 @@ class IdentifiedModal {
 /// @widget ModalProvider
 /// 浮层容器、用以接收以及展示浮层
 class ModalProvider extends StatefulWidget {
-  ModalProvider({Key? key});
+  const ModalProvider({Key? key});
 
   @override
   ModalProviderState createState() => ModalProviderState();
